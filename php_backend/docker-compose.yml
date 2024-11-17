@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  php:
+    build: .
+    container_name: php-app
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/var/www/html
+    networks:
+      - php-mysql-network
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - php-mysql-network
+
+volumes:
+  mysql-data:
+
+networks:
+  php-mysql-network:
+    driver: bridge
